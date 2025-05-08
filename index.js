@@ -251,18 +251,13 @@ const pkg = getPackageJson();
       // );
     }
 
-    const gihtubDomain = process.env['INPUT_CUSTOM-GIT-DOMAIN'] || 'github.com'
-    let remoteRepo = `https://${process.env.GITHUB_ACTOR}:${process.env.GITHUB_TOKEN}@${gihtubDomain}/${process.env.GITHUB_REPOSITORY}.git`;
+    const githubDomain = process.env['INPUT_CUSTOM-GIT-DOMAIN'] || 'github.com'
+    let remoteRepo = `https://${process.env.GITHUB_ACTOR}:${process.env.GITHUB_TOKEN}@${githubDomain}/${process.env.GITHUB_REPOSITORY}.git`;
 
-    console.log(`remoteRepo[default] = ${remoteRepo}`);
-
-    const isSsh = process.env['INPUT_SSH'];
-    
+    const isSsh = process.env['INPUT_SSH'] === 'true';
     if (isSsh) {
-      remoteRepo = `git@${gihtubDomain}:${process.env.GITHUB_REPOSITORY}.git`
-      console.log(`remoteRepo[ssh] = ${remoteRepo}`);
+      remoteRepo = `git@${githubDomain}:${process.env.GITHUB_REPOSITORY}.git`
     }
-
     
     if (process.env['INPUT_SKIP-TAG'] !== 'true') {
       await runInWorkspace('git', ['tag', newVersion]);
